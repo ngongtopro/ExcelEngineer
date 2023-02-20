@@ -1,0 +1,6 @@
+- Đọc đơn hàng
+- Lấy tất cả các đơn hàng bị hủy vì giao hàng thất bại
+- Lấy SKU đơn hàng
+- Từ SKU lấy được thành phần sản phẩm trong đơn hàng và số lượng từng thành phần
+- Lấy từng thành phần và số lượng để trừ đi trong kho
+- Đọc kho hàng
