@@ -1,7 +1,7 @@
 import copy
 
-from OrdersManager.excel_reader import HandleExcel
-from OrdersManager.storage import HandleStorage
+from utility.excel_reader import HandleExcel
+from utility.storage import HandleStorage
 
 
 class HandleOrdersExcel(HandleExcel):

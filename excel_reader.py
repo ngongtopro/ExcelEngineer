@@ -1,12 +1,9 @@
-from abc import ABC
-
 import pandas
 
 
-class HandleExcel(ABC):
+class HandleExcel:
 
     def __init__(self, path, *args, **kwargs):
-        self.path = path
         self.args = args
         self.kwargs = kwargs
         self.current_sheet = None

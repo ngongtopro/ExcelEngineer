@@ -2,7 +2,7 @@ from datetime import datetime
 
 import xlsxwriter
 
-from OrdersManager.column_converter import ColumnExcel
+from utility.column_converter import ColumnExcel
 
 
 class WriteExcel:
