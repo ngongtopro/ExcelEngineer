@@ -3,7 +3,7 @@ import pandas
 
 class HandleExcel:
 
-    def __init__(self, path, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         self.args = args
         self.kwargs = kwargs
         self.current_sheet = None
@@ -14,9 +14,10 @@ class HandleExcel:
         print('read_excel %s' % excel_name)
         excel = pandas.read_excel(excel_name, sheet_name=None)
         self.excel_list.update({excel_name: excel})
+        self.current_excel = excel
         return excel
 
-    def get_sheet(self, sheet_name, excel_name=None):
+    def get_sheet(self, sheet_name, excel_name=None, is_change_current_sheet=False):
         if excel_name is not None:
             excel = self.excel_list.get(excel_name, None)
             if excel is None:
@@ -32,7 +33,8 @@ class HandleExcel:
                 raise Exception('Current excel is None')
             else:
                 sheet = self.current_excel.get(sheet_name, None)
-        self.current_sheet = sheet
+        if is_change_current_sheet:
+            self.current_sheet = sheet
         return sheet
 
     @staticmethod
