@@ -6,8 +6,8 @@ class HandleExcel:
     def __init__(self, *args, **kwargs):
         self.args = args
         self.kwargs = kwargs
-        self.current_sheet = None
         self.excel_list = {}
+        self.current_sheet = None
         self.current_excel = None
 
     def read_excel(self, excel_name):

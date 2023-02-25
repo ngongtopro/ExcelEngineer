@@ -4,10 +4,13 @@ from ExcelEngineer.excel_reader import HandleExcel
 from ExcelEngineer.storage import HandleStorage
 
 
-class HandleOrdersExcel(HandleExcel):
+class HandleOrders:
 
-    def __init__(self, path):
-        super().__init__(path)
+    def __init__(self, orders_path):
+        self.orders = HandleExcel()
+        self.orders_excel = self.orders.read_excel(orders_path)
+        self.orders_sheet = self.orders.get_sheet('orders')
+
         self.new_table = []
         self.city_table = {}
         self.turnover = 0
@@ -23,11 +26,11 @@ class HandleOrdersExcel(HandleExcel):
         self.average_order_value = None
         self.number_of_order = 0
         self.production = {}
-        self.start_analysis()
+        # self.start_analysis()
 
     def start_analysis(self):
         # Đọc file excel
-        raw_data = self.get_sheet('orders')
+        raw_data = self.orders_sheet
         # Lọc tất cả các đơn hàng giao thành công
         self.filter_all_complete_orders(raw_data)
         # Tính doanh thu
@@ -140,7 +143,7 @@ class HandleOrdersExcel(HandleExcel):
 
 def do_all():
     # Đọc đơn hàng
-    orders = HandleOrdersExcel('Order.all.20221230_20230129.xlsx')
+    orders = HandleOrders('Order.all.20221230_20230129.xlsx')
     # lọc đơn hàng bị hủy
     orders.start_analysis()
     # print(orders.canceled_orders)

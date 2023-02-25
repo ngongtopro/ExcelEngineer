@@ -1,29 +1,25 @@
+import os
+
 import pandas
 
-from ExcelEngineer.excel_reader import HandleExcel
+from ExcelEngineer.excel_writter import ExcelWriter
+from ExcelEngineer.orders import HandleOrders
+from ExcelEngineer.storage import HandleStorage
+from ExcelEngineer.utility import folder
 
 
 class StorageProxy:
 
     def __init__(self, storage_file, orders_file):
-        self.storage = HandleExcel()
-        self.orders = HandleExcel()
+        self.storage = HandleStorage(storage_file)
+        self.orders = HandleOrders(orders_file)
+        self.results = ExcelWriter('results')
 
-        self.storage.read_excel(storage_file)
-        self.orders.read_excel(orders_file)
         self.canceled_orders = []
         self.success_orders = []
-        self.define = []
-        self.define_items = None
 
     def update_storage(self):
-        self.storage.get_sheet('Tồn kho')
-        self.orders.get_sheet('orders')
-        self.define_items = self.storage.get_sheet('quy ước')
-        # print(self.storage.current_sheet)
-        # print('-----------------------------')
-        # print(self.orders.current_sheet)
-        for index, item in self.orders.current_sheet.iterrows():
+        for index, item in self.orders.orders_sheet.iterrows():
             self.analysis_item(item)
 
     def analysis_item(self, item):
@@ -38,10 +34,13 @@ class StorageProxy:
         self.canceled_orders.append(item)
 
     def success_delivery_item(self, item):
+        # print(f'success_delivery_item: {item}')
         self.success_orders.append(item)
         sku_index = item.get('SKU sản phẩm')
-        materials = None
-        for index, define_item in self.define_items.iterrows():
+        # print(sku_index)
+        # materials = None
+        for index, define_item in self.storage.define_sheet.iterrows():
+            # print(define_item)
             if define_item.get('mã sku') == sku_index:
                 materials = define_item.get('tương đương')
                 self.update_material_quantity(materials)
@@ -49,11 +48,31 @@ class StorageProxy:
 
     def update_material_quantity(self, item):
         materials = item.split('+')
-        for index, material in self.storage.current_sheet:
+        # print(materials)
+        for got_material in materials:
+            words = got_material.split(' ')
+            quantity = words[0]
+            material = ' '.join(words[1:])
+            for index in self.storage.storage_sheet.index:
+                mate = self.storage.storage_sheet.loc[index, 'Tên']
+                if mate == material:
+                    old_quantity = self.storage.storage_sheet.loc[index, 'Số lượng']
+                    new_quantity = int(old_quantity) - int(quantity)
+                    self.storage.storage_sheet.loc[index, 'Số lượng'] = new_quantity
+                    print(self.storage.storage_sheet.loc[index])
 
-            pass
+    def save_file(self):
+        self.results.add_source('Đơn hủy', pandas.DataFrame(self.canceled_orders))
+        self.results.add_source('Tồn kho', self.storage.storage_sheet)
+        self.results.save_data()
 
 
 if __name__ == '__main__':
-    storage_proxy = StorageProxy('ton-kho-long-chim.xlsx', 'Order.all.20221230_20230129.xlsx')
-    storage_proxy.update_storage()
+    folder_path = folder.get_absolute_project_path()
+    print(folder_path)
+    for file in os.listdir(folder_path):
+        print(file)
+    input('Press to continue')
+    # storage_proxy = StorageProxy('ton-kho-long-chim.xlsx', 'Order.all.20221230_20230129.xlsx')
+    # storage_proxy.update_storage()
+    # storage_proxy.save_file()
