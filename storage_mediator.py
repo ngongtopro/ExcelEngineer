@@ -1,11 +1,8 @@
-import os
-
 import pandas
 
-from ExcelEngineer.excel_writter import ExcelWriter
-from ExcelEngineer.orders import HandleOrders
-from ExcelEngineer.storage import HandleStorage
-from ExcelEngineer.utility import folder
+from excel_writter import ExcelWriter
+from orders import HandleOrders
+from storage import HandleStorage
 
 
 class StorageProxy:
@@ -65,14 +62,3 @@ class StorageProxy:
         self.results.add_source('Đơn hủy', pandas.DataFrame(self.canceled_orders))
         self.results.add_source('Tồn kho', self.storage.storage_sheet)
         self.results.save_data()
-
-
-if __name__ == '__main__':
-    folder_path = folder.get_absolute_project_path()
-    print(folder_path)
-    for file in os.listdir(folder_path):
-        print(file)
-    input('Press to continue')
-    # storage_proxy = StorageProxy('ton-kho-long-chim.xlsx', 'Order.all.20221230_20230129.xlsx')
-    # storage_proxy.update_storage()
-    # storage_proxy.save_file()

@@ -4,3 +4,5 @@
 - Từ SKU lấy được thành phần sản phẩm trong đơn hàng và số lượng từng thành phần
 - Lấy từng thành phần và số lượng để trừ đi trong kho
 - Đọc kho hàng
+
+build exe: pyinstaller --onefile --paths=D:\PythonProject\environment\Lib\site-packages .\storage_mediator.py

@@ -1,4 +1,4 @@
-from ExcelEngineer.excel_reader import HandleExcel
+from excel_reader import HandleExcel
 
 
 class HandleStorage:

@@ -1,7 +1,7 @@
 import copy
 
-from ExcelEngineer.excel_reader import HandleExcel
-from ExcelEngineer.storage import HandleStorage
+from excel_reader import HandleExcel
+from storage import HandleStorage
 
 
 class HandleOrders:
